@@ -2,6 +2,14 @@
 
 Number subclass: #Integer.
 
+"category: comparing"
+
+- = aNumber
+    "Answer of aNumber is equal to the receiver. The Blue Book specifies this primitive for SmallInteger,
+     however we are not implementing that class so can use it here."
+    <primitive: 7>.
+    ^ super = aNumber.
+
 "category: factorization and divisibility"
 
 - factorial

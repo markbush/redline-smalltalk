@@ -322,7 +322,16 @@ public class ProtoObject {
     }
 
     public ProtoObject p7(ProtoObject receiver, PrimContext context) {
-        throw new IllegalStateException("Implement primitive.");
+        // (Small)Integer =
+        ProtoObject arg = context.argumentAt(0);
+        if (arg.javaValue() instanceof BigDecimal) {
+            BigDecimal argValue = (BigDecimal)arg.javaValue();
+            BigDecimal receiverValue = (BigDecimal)receiver.javaValue();
+            return smalltalkBoolean(receiverValue.compareTo(argValue) == 0);
+        } else {
+            // Handle other numberical args
+            throw new IllegalStateException("Implement primitive.");
+        }
     }
 
     public ProtoObject p8(ProtoObject receiver, PrimContext context) {
@@ -545,8 +554,8 @@ public class ProtoObject {
         // Object size.
         Object value = receiver.javaValue();
         if (value instanceof List)
-            return smalltalkNumber(((List) value).size());
-        return smalltalkNumber("0");
+            return receiver.smalltalkNumber(((List) value).size() - 1);
+        return receiver.smalltalkNumber("0");
     }
 
     public ProtoObject p63(ProtoObject receiver, PrimContext context) {

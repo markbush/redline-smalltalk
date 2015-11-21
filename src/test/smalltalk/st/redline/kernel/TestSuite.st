@@ -14,6 +14,8 @@ Object subclass: #TestSuite.
     FalseTest new test.
     self show: 'Running ObjectTests'.
     ObjectTest new test.
+    self show: 'Running CollectionTests'.
+    CollectionTest new test.
 
 - show: message
     Transcript show: message; cr.
