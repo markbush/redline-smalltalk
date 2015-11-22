@@ -2,13 +2,51 @@
 
 Number subclass: #Integer.
 
+"category: arithmetic"
+
+- + aNumber
+    "Answer the sum of the receiver and the argument, aNumber."
+    <primitive: 1>.
+
+- - aNumber
+    "Answer the difference between the receiver and the argument, aNumber."
+    <primitive: 2>.
+
+- * aNumber
+    "Answer the result of multiplying the receiver by the argument, aNumber."
+    <primitive: 9>.
+
+- / aNumber
+    "Answer the result of dividing the receiver by the argument, aNumber. Note that since as much precision as possible
+     is retained, if the division is not exact, the result will be an instance of Fraction."
+    <primitive: 10>.
+
+- // aNumber
+    "Answer the quotient of dividing the receiver by the argument, aNumber with truncation towards negative infinity."
+    <primitive: 32>.
+
 "category: comparing"
 
 - = aNumber
-    "Answer of aNumber is equal to the receiver. The Blue Book specifies this primitive for SmallInteger,
+    "Answer if aNumber is equal to the receiver. The Blue Book specifies this primitive for SmallInteger,
      however we are not implementing that class so can use it here."
     <primitive: 7>.
-    ^ super = aNumber.
+
+- < aNumber
+    "Answer whether the receiver is less than the argument."
+    <primitive: 3>.
+
+- <= aNumber
+    "Answer whether the receiver is less than the argument."
+    <primitive: 5>.
+
+- > aNumber
+    "Answer whether the receiver is less than the argument."
+    <primitive: 4>.
+
+- >= aNumber
+    "Answer whether the receiver is less than the argument."
+    <primitive: 6>.
 
 "category: factorization and divisibility"
 

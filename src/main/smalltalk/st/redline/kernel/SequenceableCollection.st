@@ -2,6 +2,18 @@
 
 Collection subclass: #SequenceableCollection.
 
+"category: comparing"
+
+- = aCollection
+    "Answer if aCollection is equal to the receiver."
+    self == aCollection ifTrue: [ ^ true ].
+    (aCollection isKindOf: SequenceableCollection) ifFalse: [ false ].
+    self size = aCollection size ifFalse: [ ^ false ].
+    1 to: self size do: [ :index |
+      (self at: index) = (aCollection at: index) ifFalse: [ ^ false ].
+    ].
+    ^ true.
+
 "category: accessing"
 
 - atAll: aCollection put: anObject
@@ -53,14 +65,24 @@ Collection subclass: #SequenceableCollection.
      the element of replacementCollection whose index is repStart. Answer the receiver. No range checks are performed,
      except if the receiver is the same as replacementCollection but repStart is not 1, then an error reporting that
      indices are out of range will occur."
-    self notImplementedYet.
+    | index repOffset |
+    (self == replacementCollection and: [ repStart ~= 1 ])
+      ifTrue: [ self errorSubscriptBounds: self size + 1 ].
+    index := start.
+    repOffset := repStart - start.
+    [ index <= stop ]
+      whileTrue: [
+        self at: index put: (replacementCollection at: repOffset + index).
+        index := index + 1
+      ].
+    ^ self.
 
 "category: copying"
 
 - , aSequenceableCollection
     "This is the concatenation operation. Answer a copy of the receiver with each element of the argument,
     aSequenceableCollection, added, in order."
-    self notImplementedYet.
+    ^ self copyReplaceFrom: self size + 1 to: self size with: aSequenceableCollection.
 
 - copyFrom: start to: stop
     "Answer a copy of a subset of the receiver, starting from element at index start until element at index stop."
@@ -75,7 +97,32 @@ Collection subclass: #SequenceableCollection.
      insertion; stop should be exactly start-1, start = 1 means insert before the first character, start = size + 1
      means append after last character. Otherwise, this is a replacement; start and stop have to be within the
      receiver's bounds."
-    self notImplementedYet.
+    | newSequenceableCollection newSize endReplacement |
+    newSize := self size - (stop - start + 1) + replacementCollection size.
+    endReplacement := start - 1 + replacementCollection size.
+    newSequenceableCollection := self species new: newSize.
+    start > 1
+      ifTrue: [
+        newSequenceableCollection replaceFrom: 1
+                                  to: start - 1
+                                  with: self
+                                  startingAt: 1
+      ].
+    start <= endReplacement
+      ifTrue: [
+        newSequenceableCollection replaceFrom: start
+                                  to: endReplacement
+                                  with: replacementCollection
+                                  startingAt: 1
+      ].
+    endReplacement < newSize
+      ifTrue: [
+        newSequenceableCollection replaceFrom: endReplacement + 1
+                                  to: newSize
+                                  with: self
+                                  startingAt: stop + 1
+      ].
+    ^ newSequenceableCollection.
 
 - copyWith: newElement
     "Answer a copy of the receiver that is 1 bigger than the receiver and has newElement as the last element."

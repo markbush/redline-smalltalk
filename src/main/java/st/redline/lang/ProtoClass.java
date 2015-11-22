@@ -30,6 +30,16 @@ public class ProtoClass extends ProtoObject {
         return metaclass;
     }
 
+    public ProtoClass create(String name, Map<String, Integer> instVarMap) {
+        ProtoClass metaclass = create(name);
+        metaclass.variableIndexes = instVarMap;
+        int attributeSize = instVarMap.size();
+        if (attributeSize > 0) {
+          metaclass.attributes = new ProtoObject[attributeSize + 1];
+        }
+        return metaclass;
+    }
+
     public ProtoClass subclass() {
         ProtoClass subclass = new ProtoClass();
         subclass.superclass = this;

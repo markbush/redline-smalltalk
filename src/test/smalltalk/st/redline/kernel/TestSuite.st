@@ -16,6 +16,14 @@ Object subclass: #TestSuite.
     ObjectTest new test.
     self show: 'Running CollectionTests'.
     CollectionTest new test.
+    self show: 'Running StringTests'.
+    StringTest new test.
+    self show: 'Running IntegerTests'.
+    IntegerTest new test.
+    self show: 'Running SequenceableCollectionTests'.
+    SequenceableCollectionTest new test.
+    self show: 'Running IntervalTests'.
+    IntervalTest new test.
 
 - show: message
     Transcript show: message; cr.

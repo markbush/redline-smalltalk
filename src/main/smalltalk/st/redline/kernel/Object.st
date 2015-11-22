@@ -27,6 +27,10 @@ ProtoObject subclass: #Object.
     "Primitive. Answer the object which is the receiver's class."
     <primitive: 111>
 
+- species
+    "Answer the preferred class for constructing the receiver."
+    <primitive: 111>
+
 - yourself
     ^ self.
 
@@ -200,6 +204,10 @@ ProtoObject subclass: #Object.
 - notImplementedYet
     "Announce that, although the receiver inherits this message, it is not implemented YET."
     self error: 'This message is not implemented yet. Please implement is via a Test.'.
+
+- errorSubscriptBounds: anIndex
+    "Report that the specified index is out of bounds for the receiver."
+    self error: 'The index is out of range for this object.'.
 
 "category: testing"
 

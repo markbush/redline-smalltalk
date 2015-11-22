@@ -117,12 +117,20 @@ public class ProtoObject {
         return instanceOfWith("Integer", new BigDecimal(value));
     }
 
+    public ProtoObject smalltalkNumber(BigDecimal javaValue) {
+        return instanceOfWith("Integer", javaValue);
+    }
+
     public ProtoObject smalltalkNumber(Object javaValue) {
         return instanceOfWith("Integer", new BigDecimal((String) javaValue));
     }
 
     public ProtoObject smalltalkString(Object javaValue) {
         return instanceOfWith("String", javaValue);
+    }
+
+    public ProtoObject smalltalkCharacter(Object javaValue) {
+        return instanceOfWith("Character", javaValue);
     }
 
     public ProtoObject smalltalkArray(int size) {
@@ -184,6 +192,10 @@ public class ProtoObject {
         if (index != 0)
             return attributes[index];
         return resolveObject(name);
+    }
+
+    public static ProtoObject variablePutAtIn(ProtoObject object, String name, ProtoObject receiver) {
+      return receiver.variableAtPut(name, object);
     }
 
     public ProtoObject variableAtPut(String name, ProtoObject object) {
@@ -298,27 +310,81 @@ public class ProtoObject {
     //
 
     public ProtoObject p1(ProtoObject receiver, PrimContext context) {
-        throw new IllegalStateException("Implement primitive.");
+        // (Small)Integer +
+        ProtoObject arg = context.argumentAt(0);
+        if (arg.javaValue() instanceof BigDecimal) {
+            BigDecimal argValue = (BigDecimal)arg.javaValue();
+            BigDecimal receiverValue = (BigDecimal)receiver.javaValue();
+            return smalltalkNumber(receiverValue.add(argValue));
+        } else {
+            // Handle other numberical args
+            throw new IllegalStateException("Implement primitive.");
+        }
     }
 
     public ProtoObject p2(ProtoObject receiver, PrimContext context) {
-        throw new IllegalStateException("Implement primitive.");
+        // (Small)Integer -
+        ProtoObject arg = context.argumentAt(0);
+        if (arg.javaValue() instanceof BigDecimal) {
+            BigDecimal argValue = (BigDecimal)arg.javaValue();
+            BigDecimal receiverValue = (BigDecimal)receiver.javaValue();
+            return smalltalkNumber(receiverValue.subtract(argValue));
+        } else {
+            // Handle other numberical args
+            throw new IllegalStateException("Implement primitive.");
+        }
     }
 
     public ProtoObject p3(ProtoObject receiver, PrimContext context) {
-        throw new IllegalStateException("Implement primitive.");
+        // (Small)Integer <
+        ProtoObject arg = context.argumentAt(0);
+        if (arg.javaValue() instanceof BigDecimal) {
+            BigDecimal argValue = (BigDecimal)arg.javaValue();
+            BigDecimal receiverValue = (BigDecimal)receiver.javaValue();
+            return smalltalkBoolean(receiverValue.compareTo(argValue) < 0);
+        } else {
+            // Handle other numberical args
+            throw new IllegalStateException("Implement primitive.");
+        }
     }
 
     public ProtoObject p4(ProtoObject receiver, PrimContext context) {
-        throw new IllegalStateException("Implement primitive.");
+        // (Small)Integer >
+        ProtoObject arg = context.argumentAt(0);
+        if (arg.javaValue() instanceof BigDecimal) {
+            BigDecimal argValue = (BigDecimal)arg.javaValue();
+            BigDecimal receiverValue = (BigDecimal)receiver.javaValue();
+            return smalltalkBoolean(receiverValue.compareTo(argValue) > 0);
+        } else {
+            // Handle other numberical args
+            throw new IllegalStateException("Implement primitive.");
+        }
     }
 
     public ProtoObject p5(ProtoObject receiver, PrimContext context) {
-        throw new IllegalStateException("Implement primitive.");
+        // (Small)Integer <=
+        ProtoObject arg = context.argumentAt(0);
+        if (arg.javaValue() instanceof BigDecimal) {
+            BigDecimal argValue = (BigDecimal)arg.javaValue();
+            BigDecimal receiverValue = (BigDecimal)receiver.javaValue();
+            return smalltalkBoolean(receiverValue.compareTo(argValue) <= 0);
+        } else {
+            // Handle other numberical args
+            throw new IllegalStateException("Implement primitive.");
+        }
     }
 
     public ProtoObject p6(ProtoObject receiver, PrimContext context) {
-        throw new IllegalStateException("Implement primitive.");
+        // (Small)Integer >=
+        ProtoObject arg = context.argumentAt(0);
+        if (arg.javaValue() instanceof BigDecimal) {
+            BigDecimal argValue = (BigDecimal)arg.javaValue();
+            BigDecimal receiverValue = (BigDecimal)receiver.javaValue();
+            return smalltalkBoolean(receiverValue.compareTo(argValue) >= 0);
+        } else {
+            // Handle other numberical args
+            throw new IllegalStateException("Implement primitive.");
+        }
     }
 
     public ProtoObject p7(ProtoObject receiver, PrimContext context) {
@@ -339,11 +405,29 @@ public class ProtoObject {
     }
 
     public ProtoObject p9(ProtoObject receiver, PrimContext context) {
-        throw new IllegalStateException("Implement primitive.");
+        // (Small)Integer *
+        ProtoObject arg = context.argumentAt(0);
+        if (arg.javaValue() instanceof BigDecimal) {
+            BigDecimal argValue = (BigDecimal)arg.javaValue();
+            BigDecimal receiverValue = (BigDecimal)receiver.javaValue();
+            return smalltalkNumber(receiverValue.multiply(argValue));
+        } else {
+            // Handle other numberical args
+            throw new IllegalStateException("Implement primitive.");
+        }
     }
 
     public ProtoObject p10(ProtoObject receiver, PrimContext context) {
-        throw new IllegalStateException("Implement primitive.");
+        // (Small)Integer /
+        ProtoObject arg = context.argumentAt(0);
+        if (arg.javaValue() instanceof BigDecimal) {
+            BigDecimal argValue = (BigDecimal)arg.javaValue();
+            BigDecimal receiverValue = (BigDecimal)receiver.javaValue();
+            return smalltalkNumber(receiverValue.divide(argValue));
+        } else {
+            // Handle other numberical args
+            throw new IllegalStateException("Implement primitive.");
+        }
     }
 
     public ProtoObject p11(ProtoObject receiver, PrimContext context) {
@@ -431,7 +515,16 @@ public class ProtoObject {
     }
 
     public ProtoObject p32(ProtoObject receiver, PrimContext context) {
-        throw new IllegalStateException("Implement primitive.");
+        // (Small)Integer //
+        ProtoObject arg = context.argumentAt(0);
+        if (arg.javaValue() instanceof BigDecimal) {
+            BigDecimal argValue = (BigDecimal)arg.javaValue();
+            BigDecimal receiverValue = (BigDecimal)receiver.javaValue();
+            return smalltalkNumber(receiverValue.divide(argValue, BigDecimal.ROUND_FLOOR));
+        } else {
+            // Handle other numberical args
+            throw new IllegalStateException("Implement primitive.");
+        }
     }
 
     public ProtoObject p33(ProtoObject receiver, PrimContext context) {
@@ -553,12 +646,21 @@ public class ProtoObject {
     public ProtoObject p62(ProtoObject receiver, PrimContext context) {
         // Object size.
         Object value = receiver.javaValue();
-        if (value instanceof List)
+        if (value instanceof List) {
             return receiver.smalltalkNumber(((List) value).size() - 1);
+        } else if (value instanceof String) {
+          return receiver.smalltalkNumber(((String) value).length());
+        }
         return receiver.smalltalkNumber("0");
     }
 
     public ProtoObject p63(ProtoObject receiver, PrimContext context) {
+        // String at:.
+        Object value = receiver.javaValue();
+        if (value instanceof String) {
+          int index = context.intArgumentAt(0);
+          return receiver.smalltalkCharacter(((String) value).substring(index-1, index));
+        }
         throw new IllegalStateException("Implement primitive.");
     }
 
@@ -587,15 +689,42 @@ public class ProtoObject {
     }
 
     public ProtoObject p70(ProtoObject receiver, PrimContext context) {
-        // The primitiveNew routine creates a new instance of the receiver (a class)
+        // The primitive New routine creates a new instance of the receiver (a class)
         ProtoClass aClass = (ProtoClass) receiver;
         ProtoObject anInstance = new ProtoObject();
         anInstance.selfclass = aClass;
+        if (aClass.attributes != null) {
+          anInstance.attributes = new ProtoObject[aClass.attributes.length];
+        }
         return anInstance;
     }
 
     public ProtoObject p71(ProtoObject receiver, PrimContext context) {
-        throw new IllegalStateException("Implement primitive.");
+        // The primitive New: routine creates a new instance of the receiver (a class)
+        // with the specified number of indexed instance variables which we implement
+        // here with a List
+        int size = context.intArgumentAt(0);
+        ProtoClass aClass = (ProtoClass) receiver;
+        ProtoObject anInstance = new ProtoObject();
+        anInstance.selfclass = aClass;
+        if (aClass.attributes != null) {
+          anInstance.attributes = new ProtoObject[aClass.attributes.length];
+        }
+        if (aClass.name.equals("String")) {
+            String string = "";
+            while (string.length() < size) {
+                string += "\0";
+            }
+            anInstance.javaValue(string);
+        } else {
+            List<ProtoObject> array = new ArrayList<ProtoObject>();
+            ProtoObject initialElement = nil();
+            array.add(initialElement); // we add NIL at index 0 because smalltalk indexes start at 1.
+            while (array.size() < size + 1)
+                array.add(initialElement);
+            anInstance.javaValue(array);
+        }
+        return anInstance;
     }
 
     public ProtoObject p72(ProtoObject receiver, PrimContext context) {
@@ -735,6 +864,25 @@ public class ProtoObject {
     }
 
     public ProtoObject p105(ProtoObject receiver, PrimContext context) {
+        // String replaceFrom:to:with:startingAt:
+        Object value = receiver.javaValue();
+        if (value instanceof String) {
+          String valueString = (String)value;
+          int start = context.intArgumentAt(0);
+          int stop = context.intArgumentAt(1);
+          Object withObject = context.argumentAt(2).javaValue();
+          int repStart = context.intArgumentAt(3);
+          if (withObject instanceof String) {
+            String replacementString = (String)withObject;
+            int replacementLength = stop + 1 - start;
+            String replacementSubstring = replacementString.substring(repStart-1, repStart+replacementLength-1);
+            String newString = valueString.substring(0, start-1);
+            newString += replacementSubstring;
+            newString += valueString.substring(start+replacementLength-1);
+            receiver.javaValue(newString);
+            return receiver;
+          }
+        }
         throw new IllegalStateException("Implement primitive.");
     }
 
@@ -756,7 +904,21 @@ public class ProtoObject {
 
     public ProtoObject p110(ProtoObject receiver, PrimContext context) {
         // Object ==
-        return smalltalkBoolean(receiver.equals(context.argumentAt(0)));
+        ProtoObject arg = context.argumentAt(0);
+        if (receiver.equals(arg)) {
+            return smalltalkBoolean(true);
+        } else if (receiver.selfclass != null
+                   && receiver.selfclass.name != null
+                   && receiver.selfclass.name.equals("Character")) {
+            String receiverChar = (String)receiver.javaValue();
+            if (arg.selfclass.name.equals("Character")) {
+                String argChar = (String)arg.javaValue();
+                return smalltalkBoolean(receiverChar.equals(argChar));
+            } else {
+                return smalltalkBoolean(false);
+            }
+        }
+        return smalltalkBoolean(false);
     }
 
     public ProtoObject p111(ProtoObject receiver, PrimContext context) {
@@ -893,7 +1055,15 @@ public class ProtoObject {
 
     public ProtoObject p138(ProtoObject receiver, PrimContext context) {
         // BlockClojure -> whileTrue: aBlock
-        throw new IllegalStateException("Implement primitive.");
+        // Evaluate the argument, aBlock, as long as the value of the receiver is true.
+        ProtoObject aBlockResult = nil();
+        ProtoObject aBlock = context.argumentAt(0);
+        ProtoObject receiverResult = receiver.perform("value");
+        while (receiverResult.isTrueObject()) {
+            aBlockResult = aBlock.perform("value");
+            receiverResult = receiver.perform("value");
+        }
+        return aBlockResult;
     }
 
     public ProtoObject p139(ProtoObject receiver, PrimContext context) {

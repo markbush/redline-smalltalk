@@ -59,11 +59,11 @@ Object subclass: #Behavior.
 - new: anInteger
     "Answer an instance of the receiver with anlnteger number of indexed variables. Report an error if the receiver is
      not indexable."
-    self notImplementedYet.
+    ^ (self basicNew: anInteger) initialize.
 
 - basicNew: anInteger
     "Same as basicNew, except this method should not be overridden in a subclass."
-    self notImplementedYet.
+    <primitive: 71>.
 
 "category: creating a class hierarchy"
 

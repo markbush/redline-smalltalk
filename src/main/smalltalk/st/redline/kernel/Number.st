@@ -6,20 +6,20 @@ Magnitude subclass: #Number.
 
 - + aNumber
     "Answer the sum of the receiver and the argument, aNumber."
-    self notImplementedYet.
+    self subclassResponsibility.
 
 - - aNumber
     "Answer the difference between the receiver and the argument, aNumber."
-    self notImplementedYet.
+    self subclassResponsibility.
 
 - * aNumber
     "Answer the result of multiplying the receiver by the argument, aNumber."
-    self notImplementedYet.
+    self subclassResponsibility.
 
 - / aNumber
     "Answer the result of dividing the receiver by the argument, aNumber. Note that since as much precision as possible
      is retained, if the division is not exact, the result will be an instance of Fraction."
-    self notImplementedYet.
+    self subclassResponsibility.
 
 - // aNumber
     "Answer the integer quotient defined by division with truncation toward negative infinity."
@@ -171,19 +171,19 @@ Magnitude subclass: #Number.
 - to: stop
     "Answer an Interval from the receiver up to the argument, stop, with each next element computed by incrementing the
      previous one by 1."
-    self notImplementedYet.
+    ^ Interval from: self to: stop.
 
 - to: stop by: step
     "Answer an Interval from the receiver up to the argument, stop, with each next element computed by incrementing the
      previous one by step."
-    self notImplementedYet.
+    ^ Interval from: self to: stop by: step.
 
 - to: stop do: aBlock
     "Create an Interval from the receiver up to the argument, stop, incrementing by 1. Evaluate the argument, aBlock,
      for each element of the Interval."
-    self notImplementedYet.
+    (Interval from: self to: stop) do: aBlock.
 
 - to: stop by: step do: aBlock
     "Create an Interval from the receiver up to the argument, stop, incrementing by step. Evaluate the argument, aBlock,
      for each element of the Interval."
-    self notImplementedYet.
+    (Interval from: self to: stop by: step) do: aBlock.

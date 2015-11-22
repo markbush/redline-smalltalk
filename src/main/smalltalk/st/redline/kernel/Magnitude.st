@@ -6,7 +6,7 @@ Object subclass: #Magnitude.
 
 - < aMagnitude
     "Answer whether the receiver is less than the argument."
-    self notImplementedYet.
+    self subclassResponsibility.
 
 - <= aMagnitude
     "Answer whether the receiver is less than or equal to the argument."

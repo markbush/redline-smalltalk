@@ -26,6 +26,9 @@ Magnitude subclass: #Character.
      message digitValue: for the correspondences)."
     self notImplementedYet.
 
+- = aCharacter
+    <primitive: 110>
+
 "category: testing"
 
 - isAlphaNumeric

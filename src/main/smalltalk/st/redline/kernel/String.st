@@ -2,6 +2,19 @@
 
 ArrayedCollection subclass: #String.
 
+"category: accessing"
+
+- replaceFrom: start to: stop with: replacementCollection startingAt: repStart
+    "Associate each index between start and stop with the elements of the argument, replacementCollection, starting at
+     the element of replacementCollection whose index is repStart. Answer the receiver. No range checks are performed,
+     except if the receiver is the same as replacementCollection but repStart is not 1, then an error reporting that
+     indices are out of range will occur."
+    <primitive: 105>
+
+- at: anIndex
+    "Answer the character at anIndex in the receiver."
+    <primitive: 63>
+
 "category: comparing"
 
 - < aString
