@@ -16,6 +16,12 @@ TestCase subclass: #IntegerTest.
     self testQuotient.
     self testPrintString.
     self testNumberOfDigitsInBase.
+    self testReciprocal.
+    self testNegated.
+    self testRaisedToInteger.
+    self testNegative.
+    self testMin.
+    self testMax.
 
 - testAddition
     self assert: 1 + 1 equals: 2 withMessage: '1 + 1 should equal 2'.
@@ -127,3 +133,32 @@ TestCase subclass: #IntegerTest.
     self assert: result equals: 3 withMessage: 'should need 3 digits to display 4095 in base 16'.
     result := 4096 numberOfDigitsInBase: 16.
     self assert: result equals: 4 withMessage: 'should need 4 digits to display 4096 in base 16'.
+
+- testReciprocal
+    self assert: 1 reciprocal equals: 1 withMessage: 'reciprocal of 1 should be 1'.
+    self assert: 5 reciprocal equals: 0.2 withMessage: 'reciprocal of 5 should be 0.2'.
+
+- testNegated
+    self assert: 0 negated equals: 0 withMessage: 'negative of 0 should be 0'.
+    self assert: 5 negated equals: -5 withMessage: 'negative of 5 should be -5'.
+    self assert: -23 negated equals: 23 withMessage: 'negative of -23 should be 23'.
+
+- testRaisedToInteger
+    self assert: (5 raisedToInteger: 0) equals: 1 withMessage: 'number raised to 0 power should be 1'.
+    self assert: (5 raisedToInteger: 1) equals: 5 withMessage: 'number raised to power 1 should be itself'.
+    self assert: (5 raisedToInteger: 2) equals: 25 withMessage: '5 raised to power 2nd should be 25'.
+    self assert: (5 raisedToInteger: 4) equals: 625 withMessage: '5 raised to power 4th should be 625'.
+    self assert: (5 raisedToInteger: -1) equals: 0.2 withMessage: '5 raised to power -1 should be 0.2'.
+
+- testNegative
+    self assertFalse: 0 negative withMessage: '0 should not be negative'.
+    self assertTrue: -57 negative withMessage: 'negative number should be negative'.
+    self assertFalse: 286 negative withMessage: 'positive number should not be negative'.
+
+- testMin
+    self assert: (3 min: 5) equals: 3 withMessage: 'min of 3 and 5 should be 3'.
+    self assert: (-3 min: -5) equals: -5 withMessage: 'min of -3 and -5 should be -5'.
+
+- testMax
+    self assert: (3 max: 5) equals: 5 withMessage: 'max of 3 and 5 should be 5'.
+    self assert: (-3 max: -5) equals: -3 withMessage: 'max of -3 and -5 should be -3'.
