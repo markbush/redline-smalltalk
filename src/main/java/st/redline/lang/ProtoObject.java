@@ -754,7 +754,17 @@ public class ProtoObject {
     }
 
     public ProtoObject p72(ProtoObject receiver, PrimContext context) {
-        throw new IllegalStateException("Implement primitive.");
+        // Object become:
+        // This doesn't work for subclasses of ProtoObject, but that
+        // should not be a realistic limitation for now.
+        ProtoObject arg = context.argumentAt(0);
+        ProtoObject tempProtoObject = receiver.selfclass; receiver.selfclass = arg.selfclass; arg.selfclass = tempProtoObject;
+        String tempString = receiver.name; receiver.name = arg.name; arg.name = tempString;
+        Object tempObject = receiver.javaValue; receiver.javaValue = arg.javaValue; arg.javaValue = tempObject;
+        boolean tempBool = receiver.trueness; receiver.trueness = arg.trueness; arg.trueness = tempBool;
+        tempBool = receiver.falseness; receiver.falseness = arg.falseness; arg.falseness = tempBool;
+        ProtoObject[] tempArray = receiver.attributes; receiver.attributes = arg.attributes; arg.attributes = tempArray;
+        return receiver;
     }
 
     public ProtoObject p73(ProtoObject receiver, PrimContext context) {

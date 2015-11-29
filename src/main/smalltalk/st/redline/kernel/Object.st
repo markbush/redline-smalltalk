@@ -285,4 +285,4 @@ ProtoObject subclass: #Object.
     <primitive: 74>
 
 - become: otherObject
-    self error: 'implement me'.
+    <primitive: 72>

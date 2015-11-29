@@ -12,6 +12,7 @@ TestCase subclass: #ObjectTest.
     self testClassMembershipMethods.
     self testTestingMethods.
     self testMessageHandlingMethods.
+    self testBecome.
 
 - testHasInitializeMethods
     "Assert Object has the expected initialize class and instance methods."
@@ -59,3 +60,18 @@ TestCase subclass: #ObjectTest.
     "self assertTrue: (Object perform: #???: with: ??? with: ???) withMessage: 'should handle perform with firstObject and secondObject arguments.'."
     "self assertTrue: (Object perform: #???: with: ??? with: ??? with: ???) withMessage: 'should handle perform with 3 arguments.'."
     self assertFalse: (Object perform: #== withArguments: #(Object)) withMessage: 'should handle perform with arguments.'.
+
+- testBecome
+    | first second |
+    first := #(1 2 3).
+    second := WriteStream on: String new.
+    second nextPutAll: 'Hello, World'.
+    self assert: first class equals: Array withMessage: 'first should starts off as an Array'.
+    self assert: first size equals: 3 withMessage: 'should have 3 elements'.
+    self assert: second class equals: WriteStream withMessage: 'second should starts off as a WriteStream'.
+    self assert: second contents equals: 'Hello, World' withMessage: 'should be able to get contents of the stream'.
+    first become: second.
+    self assert: second class equals: Array withMessage: 'second should now be an Array'.
+    self assert: second size equals: 3 withMessage: 'should have 3 elements'.
+    self assert: first class equals: WriteStream withMessage: 'first should now be a WriteStream'.
+    self assert: first contents equals: 'Hello, World' withMessage: 'should be able to get contents of the stream'.

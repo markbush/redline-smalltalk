@@ -15,6 +15,7 @@ TestCase subclass: #OrderedCollectionTest.
     self testDo.
     self testCollect.
     self testSelect.
+    self testMakeRoomAtLast.
 
 - testSize
     | collection |
@@ -127,3 +128,18 @@ TestCase subclass: #OrderedCollectionTest.
     self assert: (result at: 3) equals: 9 withMessage: 'should have correct value at 3'.
     self assert: (result at: 4) equals: 16 withMessage: 'should have correct value at 4'.
     self assert: (result at: 5) equals: 25 withMessage: 'should have correct value at 5'.
+
+- testMakeRoomAtLast
+    | collection |
+    collection := OrderedCollection new: 10.
+    self assert: collection size equals: 0 withMessage: 'should start off with zero size'.
+    self assert: collection basicSize equals: 10 withMessage: 'should have underlying size of 10'.
+    collection addAll: #(1 2 3).
+    self assert: collection size equals: 3 withMessage: 'should add three elements'.
+    self assert: collection basicSize equals: 10 withMessage: 'should still have underlying size of 10'.
+    collection makeRoomAtLast.
+    self assert: collection size equals: 3 withMessage: 'should still have three elements'.
+    self assert: collection basicSize equals: 20 withMessage: 'should now have underlying size of 20'.
+    self assert: (collection at: 1) equals: 1 withMessage: 'should have correct value at 1'.
+    self assert: (collection at: 2) equals: 2 withMessage: 'should have correct value at 2'.
+    self assert: (collection at: 3) equals: 3 withMessage: 'should have correct value at 3'.

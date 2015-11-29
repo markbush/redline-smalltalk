@@ -133,7 +133,7 @@ SequenceableCollection subclass: #OrderedCollection
 
 - makeRoomAtLast
     | newCollection |
-    newCollection := self species new: self size * 2.
+    newCollection := self species new: self basicSize * 2.
     newCollection addAll: self.
     self become: newCollection.
 
