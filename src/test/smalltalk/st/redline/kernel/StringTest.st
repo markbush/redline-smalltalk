@@ -7,6 +7,7 @@ TestCase subclass: #StringTest.
 - test
     self testSize.
     self testAt.
+    self testAtPut.
     self testReplaceFromToWithStartingAt.
     self testConcatenation.
 
@@ -19,6 +20,14 @@ TestCase subclass: #StringTest.
     aString := 'Hello, World!'.
     self assert: (aString at: 3) equals: $l withMessage: 'should index a Character from a String'.
     self assert: (aString at: 6) equals: $, withMessage: 'should index a Character from a String'.
+
+- testAtPut
+    | aString |
+    aString := 'hello, world.'.
+    aString at: 1 put: $H.
+    aString at: 8 put: $W.
+    aString at: 13 put: $!.
+    self assert: aString equals: 'Hello, World!' withMessage: 'should replace characters in the String'.
 
 - testReplaceFromToWithStartingAt
     | aString |

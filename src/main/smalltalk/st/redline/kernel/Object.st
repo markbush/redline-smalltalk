@@ -258,15 +258,17 @@ ProtoObject subclass: #Object.
     "Append to the argument, aStream, a sequence of characters that identifies the receiver."
     | title |
     title := self class name.
-    aStream
-      nextPutAll: (title first isVowel ifTrue: [ 'an ' ] ifFalse: [ 'a ' ]);
-      nextPutAll: title.
+    aStream nextPutAll: (title first isVowel ifTrue: [ 'an ' ] ifFalse: [ 'a ' ]).
+    aStream nextPutAll: title.
 
 "category: storing"
 
 - storeString
     "Answer a String representation of the receiver from which the receiver can be reconstructed."
-    ^ String streamContents: [:s | self storeOn: s].
+    | stream |
+    stream := WriteStream on: String new.
+    self storeOn: stream.
+    ^ stream contents.
 
 "category: system primitives"
 

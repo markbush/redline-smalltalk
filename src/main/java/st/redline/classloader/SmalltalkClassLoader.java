@@ -132,26 +132,35 @@ public class SmalltalkClassLoader extends ClassLoader {
 
     public ProtoObject loadSmalltalkBlock(String name, PrimContext context) {
         if (blocks.containsKey(name))
-            return createBlockInstance(blocks.get(name), context);
+            return createBlockInstance(blocks.get(name), context, null);
         Block block = (Block) blocksToBeCompiled.remove(name);
         if (block == null)
             throw new IllegalStateException("Block to be compiled '" + name + "' not found.");
         block.accept(block.analyser());
         try {
             ProtoObject newblock = (ProtoObject) defineClass(block.classBytes()).newInstance();
+            if (newblock instanceof ProtoBlock) {
+                ((ProtoBlock)newblock).block(block);
+            }
             blocks.put(name, newblock);
-            return createBlockInstance(newblock, context);
+            return createBlockInstance(newblock, context, block);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
 
-    protected ProtoObject createBlockInstance(ProtoObject block, PrimContext context) {
+    protected ProtoObject createBlockInstance(ProtoObject block, PrimContext context, Block theBlock) {
         if (block.isMethodBlock())
             return block;
         try {
             Constructor constructor = block.getClass().getConstructor(PrimContext.class);
-            return (ProtoBlock) constructor.newInstance(context);
+            ProtoBlock newBlock = (ProtoBlock) constructor.newInstance(context);
+            if (theBlock != null) {
+                newBlock.block(theBlock);
+            } else if (block instanceof ProtoBlock) {
+                newBlock.block(((ProtoBlock)block).block());
+            }
+            return newBlock;
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

@@ -58,4 +58,10 @@ Magnitude subclass: #Character.
 
 - isVowel
     "Answer whether the receiver is one of the vowels: a, e, i, o, or u, in upper or lowercase."
-    self notImplementedYet.
+    ^ 'AEIOUaeiou' includes: self.
+
+"category: printing"
+
+- printOn: aStream
+    aStream nextPut: $$.
+    aStream nextPut: self.

@@ -14,6 +14,8 @@ TestCase subclass: #IntegerTest.
     self testGreaterThan.
     self testGreaterThanOrEqual.
     self testQuotient.
+    self testPrintString.
+    self testNumberOfDigitsInBase.
 
 - testAddition
     self assert: 1 + 1 equals: 2 withMessage: '1 + 1 should equal 2'.
@@ -77,3 +79,51 @@ TestCase subclass: #IntegerTest.
 - testQuotient
     self assert: 9 // 4 equals: 2 withMessage: '9 // 4 should be 2'.
     self assert: -9 // 4 equals: -3 withMessage: '-9 // 4 should be -3'.
+
+- testPrintString
+    | result |
+    result := 1 printString.
+    self assert: result equals: '1' withMessage: 'should produce correct string for 1'.
+    result := 476 printString.
+    self assert: result equals: '476' withMessage: 'should produce correct string for 476'.
+    result := -24 printString.
+    self assert: result equals: '-24' withMessage: 'should produce correct string for -24'.
+
+- testNumberOfDigitsInBase
+    | result |
+    result := 0 numberOfDigitsInBase: 10.
+    self assert: result equals: 1 withMessage: 'should need 1 digit to display 0 in base 10'.
+    result := 1 numberOfDigitsInBase: 10.
+    self assert: result equals: 1 withMessage: 'should need 1 digit to display 1 in base 10'.
+    result := 9 numberOfDigitsInBase: 10.
+    self assert: result equals: 1 withMessage: 'should need 1 digit to display 9 in base 10'.
+    result := 10 numberOfDigitsInBase: 10.
+    self assert: result equals: 2 withMessage: 'should need 2 digits to display 10 in base 10'.
+    result := 999 numberOfDigitsInBase: 10.
+    self assert: result equals: 3 withMessage: 'should need 3 digits to display 999 in base 10'.
+    result := 1000 numberOfDigitsInBase: 10.
+    self assert: result equals: 4 withMessage: 'should need 4 digits to display 1000 in base 10'.
+    result := 0 numberOfDigitsInBase: 2.
+    self assert: result equals: 1 withMessage: 'should need 1 digit to display 0 in base 2'.
+    result := 1 numberOfDigitsInBase: 2.
+    self assert: result equals: 1 withMessage: 'should need 1 digit to display 1 in base 2'.
+    result := 2 numberOfDigitsInBase: 2.
+    self assert: result equals: 2 withMessage: 'should need 2 digit to display 2 in base 2'.
+    result := 7 numberOfDigitsInBase: 2.
+    self assert: result equals: 3 withMessage: 'should need 3 digits to display 7 in base 2'.
+    result := 15 numberOfDigitsInBase: 2.
+    self assert: result equals: 4 withMessage: 'should need 4 digits to display 15 in base 2'.
+    result := 16 numberOfDigitsInBase: 2.
+    self assert: result equals: 5 withMessage: 'should need 5 digits to display 16 in base 2'.
+    result := 0 numberOfDigitsInBase: 16.
+    self assert: result equals: 1 withMessage: 'should need 1 digit to display 0 in base 16'.
+    result := 1 numberOfDigitsInBase: 16.
+    self assert: result equals: 1 withMessage: 'should need 1 digit to display 1 in base 16'.
+    result := 15 numberOfDigitsInBase: 16.
+    self assert: result equals: 1 withMessage: 'should need 1 digit to display 15 in base 16'.
+    result := 16 numberOfDigitsInBase: 16.
+    self assert: result equals: 2 withMessage: 'should need 2 digits to display 16 in base 16'.
+    result := 4095 numberOfDigitsInBase: 16.
+    self assert: result equals: 3 withMessage: 'should need 3 digits to display 4095 in base 16'.
+    result := 4096 numberOfDigitsInBase: 16.
+    self assert: result equals: 4 withMessage: 'should need 4 digits to display 4096 in base 16'.

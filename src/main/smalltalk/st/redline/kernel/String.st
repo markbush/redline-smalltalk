@@ -15,6 +15,10 @@ ArrayedCollection subclass: #String.
     "Answer the character at anIndex in the receiver."
     <primitive: 63>
 
+- at: anIndex put: aCharacter
+    "Store aCharacter at position anIndex in the receiver."
+    <primitive: 64>
+
 "category: comparing"
 
 - < aString
@@ -62,3 +66,17 @@ ArrayedCollection subclass: #String.
 - asSymbol
     "Answer the unique Symbol whose characters are the characters of the receiver."
     self notImplementedYet.
+
+"category: printing"
+
+- printOn: aStream
+    self storeOn: aStream
+
+- storeOn: aStream
+    | x |
+    aStream nextPut: $'.
+    1 to: self size do: [ :i |
+      x := self at: i.
+      aStream nextPut: x.
+      x = $' ifTrue: [ aStream nextPut: x ] ].
+    aStream nextPut: $'.

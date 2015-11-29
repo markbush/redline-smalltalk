@@ -32,12 +32,37 @@ public class ProtoClass extends ProtoObject {
 
     public ProtoClass create(String name, Map<String, Integer> instVarMap) {
         ProtoClass metaclass = create(name);
-        metaclass.variableIndexes = instVarMap;
-        int attributeSize = instVarMap.size();
+        metaclass.variableIndexes = new HashMap<String, Integer>();
+        int attributeSize = addSuperclassInstanceVariables(metaclass);
+        addThisClassInstanceVariables(instVarMap, metaclass, attributeSize);
+        attributeSize += instVarMap.size();
         if (attributeSize > 0) {
-          metaclass.attributes = new ProtoObject[attributeSize + 1];
+            metaclass.attributes = new ProtoObject[attributeSize + 1];
         }
         return metaclass;
+    }
+
+    private void addThisClassInstanceVariables(Map<String, Integer> instVarMap, ProtoClass metaclass, int attributeSize) {
+      for (String instVarName : instVarMap.keySet()) {
+        metaclass.variableIndexes.put(instVarName, instVarMap.get(instVarName) + attributeSize);
+      }
+    }
+
+    private int addSuperclassInstanceVariables(ProtoClass metaclass) {
+      int attributeSize = 0;
+      if (superclass != null && superclass instanceof ProtoClass) {
+           ProtoClass theProtoSuperclass = (ProtoClass)superclass;
+           if (theProtoSuperclass.thisclass != null && theProtoSuperclass.thisclass instanceof ProtoClass) {
+               ProtoClass theSuperclass = (ProtoClass)theProtoSuperclass.thisclass;
+               if (theSuperclass.variableIndexes != null) {
+                   for (String instVarName : theSuperclass.variableIndexes.keySet()) {
+                       metaclass.variableIndexes.put(instVarName, theSuperclass.variableIndexes.get(instVarName));
+                   }
+                   attributeSize = theSuperclass.variableIndexes.size();
+               }
+           }
+      }
+      return attributeSize;
     }
 
     public ProtoClass subclass() {
@@ -85,6 +110,14 @@ public class ProtoClass extends ProtoObject {
         return 0;  // Smalltalk indexes can't be zero (0).
     }
 
+    protected void addImportsTo(ProtoObject object) {
+      if (imports != null && object instanceof ProtoClass) {
+          ProtoClass newClass = (ProtoClass)object;
+          for (String className : imports.keySet()) {
+              newClass.importAtPut(className, imports.get(className));
+          }
+      }
+    }
     public void importAtPut(String className, String fullyQualifiedName) {
         if (imports == null)
             imports = new Hashtable<String, String>();

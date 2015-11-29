@@ -29,8 +29,12 @@ Object subclass: #Magnitude.
 
 - min: aMagnitude
     "Answer the receiver or the argument, whichever has the lesser magnitude."
-    self notImplementedYet.
+    self < aMagnitude
+      ifTrue: [ ^ self ]
+      ifFalse: [ ^ aMagnitude ].
 
 - max: aMagnitude
     "Answer the receiver or the argument, whichever has the greater magnitude."
-    self notImplementedYet.
+    self > aMagnitude
+      ifTrue: [ ^ self ]
+      ifFalse: [ ^ aMagnitude ].

@@ -14,14 +14,16 @@ Object subclass: #TestSuite.
     FalseTest new test.
     self show: 'Running ObjectTests'.
     ObjectTest new test.
-    self show: 'Running CollectionTests'.
-    CollectionTest new test.
-    self show: 'Running StringTests'.
-    StringTest new test.
     self show: 'Running IntegerTests'.
     IntegerTest new test.
+    self show: 'Running WriteStreamTests'.
+    WriteStreamTest new test.
+    self show: 'Running StringTests'.
+    StringTest new test.
     self show: 'Running SequenceableCollectionTests'.
     SequenceableCollectionTest new test.
+    self show: 'Running ArrayedCollectionTests'.
+    ArrayedCollectionTest new test.
     self show: 'Running IntervalTests'.
     IntervalTest new test.
 

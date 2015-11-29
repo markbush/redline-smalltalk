@@ -25,6 +25,21 @@ Number subclass: #Integer.
     "Answer the quotient of dividing the receiver by the argument, aNumber with truncation towards negative infinity."
     <primitive: 32>.
 
+- reciprocal
+    ^ 1 / self
+
+- negated
+    ^ 0 - self
+
+"category: mathematical functions"
+
+- raisedToInteger: anInteger
+    | result |
+    anInteger negative ifTrue: [ ^ (self raisedToInteger: anInteger negated) reciprocal ].
+    result := 1.
+    anInteger timesRepeat: [ result := result * self ].
+    ^ result.
+
 "category: comparing"
 
 - = aNumber
@@ -47,6 +62,11 @@ Number subclass: #Integer.
 - >= aNumber
     "Answer whether the receiver is less than the argument."
     <primitive: 6>.
+
+"category: testing"
+
+- negative
+    ^ self < 0
 
 "category: factorization and divisibility"
 
@@ -108,3 +128,54 @@ Number subclass: #Integer.
      representation) shifted left by the number of bits indicated by the argument, anInteger. Negative arguments shift
      right. Zeros are shifted in from the right in left shifts. The sign bit is extended in right shifts."
     self notImplementedYet.
+
+"category: enumerating"
+
+- timesRepeat: aBlock
+    | count |
+    count := 1.
+    [count <= self]
+      whileTrue: [
+        aBlock value.
+        count := count + 1
+      ].
+
+"category: printing"
+
+- printOn: aStream base: base
+    ^ self printOn: aStream base: base length: 0 padded: false
+
+- printOn: aStream base: base length: minimumLength padded: padWithZeroes
+    | n numberOfDigits totalLength divisor |
+    self < 0
+      ifTrue: [ n := self negated. totalLength := 1 ]
+      ifFalse: [ n := self. totalLength := 0 ].
+    numberOfDigits := n numberOfDigitsInBase: base.
+    totalLength := totalLength + numberOfDigits.
+    padWithZeroes ifFalse: [
+      [ totalLength < minimumLength ]
+        whileTrue: [ aStream space. totalLength := totalLength + 1 ]
+    ].
+    n = self ifFalse: [ aStream nextPut: $- ].
+    padWithZeroes
+      ifTrue: [
+        [ totalLength < minimumLength ]
+          whileTrue: [ aStream nextPut: $0. totalLength := totalLength + 1 ]
+      ].
+    divisor := (base raisedToInteger: numberOfDigits - 1).
+    [ divisor > 0 ]
+      whileTrue: [
+        | digit |
+        digit := n // divisor.
+        aStream nextPut: ('0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ' at: digit + 1).
+        n := n - (digit * divisor).
+        divisor := divisor // base
+      ].
+
+- numberOfDigitsInBase: base
+    | n digits |
+    n := 1.
+    digits := 1.
+    [ (n * base) <= self ]
+      whileTrue: [ n := n * base. digits := digits + 1. ].
+    ^ digits.

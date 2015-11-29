@@ -2,6 +2,11 @@
 
 ClassDescription subclass: #Class.
 
+"category: accessing"
+
+- name
+    <primitive: 201>
+
 "category: accessing instances and variables"
 
 - addClassVarName: aString

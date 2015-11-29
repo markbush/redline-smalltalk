@@ -187,3 +187,11 @@ Magnitude subclass: #Number.
     "Create an Interval from the receiver up to the argument, stop, incrementing by step. Evaluate the argument, aBlock,
      for each element of the Interval."
     (Interval from: self to: stop by: step) do: aBlock.
+
+"category: printing"
+
+- printOn: aStream
+    ^ self printOn: aStream base: 10
+
+- printOn: aStream base: base
+    ^ self subclassResponsibility

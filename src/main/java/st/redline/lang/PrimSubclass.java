@@ -18,7 +18,7 @@ public class PrimSubclass extends ProtoObject {
         Map<String, Integer> instVarMap = new HashMap<String,Integer>();
         if (context.arguments != null && context.arguments.length > 1) {
             ProtoObject instVars = context.argumentAt(1);
-            if (instVars != null && instVars.javaValue() != null) {
+            if (instVars != null && instVars.javaValue() != null && !((String)instVars.javaValue()).trim().equals("")) {
                 String[] instVarNames = ((String)instVars.javaValue()).trim().split("\\s+");
                 int instVarIndex = 1;
                 for (String instVarName : instVarNames) {

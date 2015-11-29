@@ -78,8 +78,10 @@ public class ProtoObject {
         SmalltalkClassLoader smalltalkClassLoader = classLoader();
         try {
             ProtoObject object = smalltalkClassLoader.loadSmalltalkClass(name, false);
-            if (object != null)
+            if (object != null) {
+                addImportsTo(object);
                 return object;
+            }
             if (Character.isUpperCase(name.charAt(0))) {
                 String fullyQualifiedName = importFor(name);
                 if (fullyQualifiedName != null) {
@@ -94,14 +96,20 @@ public class ProtoObject {
             // It is expected the loading of an object results in the registering of
             // a Smalltalk class in the class registry.
             object = smalltalkClassLoader.loadSmalltalkClass(name, true);
-            if (object != null)
-                return smalltalkClassLoader.loadSmalltalkClass(name, false);
+            if (object != null) {
+                object = smalltalkClassLoader.loadSmalltalkClass(name, false);
+                addImportsTo(object);
+                return object;
+            }
             throw new IllegalStateException("Error: Class '" + name + "' should have been resolved by here.");
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
     }
 
+    protected void addImportsTo(ProtoObject object) {
+      // Implemented in Class subclasses
+    }
     public String importFor(String name) {
         if (selfclass != null)
             return selfclass.importFor(name);
@@ -390,6 +398,9 @@ public class ProtoObject {
     public ProtoObject p7(ProtoObject receiver, PrimContext context) {
         // (Small)Integer =
         ProtoObject arg = context.argumentAt(0);
+        if (arg == null) {
+            return smalltalkBoolean(false);
+        }
         if (arg.javaValue() instanceof BigDecimal) {
             BigDecimal argValue = (BigDecimal)arg.javaValue();
             BigDecimal receiverValue = (BigDecimal)receiver.javaValue();
@@ -665,6 +676,21 @@ public class ProtoObject {
     }
 
     public ProtoObject p64(ProtoObject receiver, PrimContext context) {
+        // String at:put:.
+        Object value = receiver.javaValue();
+        if (value instanceof String) {
+            String valueString = (String)value;
+            int index = context.intArgumentAt(0);
+            ProtoObject putObject = context.argumentAt(1);
+            Object putString = putObject.javaValue();
+            if (putString instanceof String) {
+                String newString = valueString.substring(0, index-1);
+                newString += ((String) putString).substring(0, 1);
+                newString += valueString.substring(index);
+                receiver.javaValue(newString);
+                return putObject;
+            }
+        }
         throw new IllegalStateException("Implement primitive.");
     }
 
@@ -871,6 +897,9 @@ public class ProtoObject {
           int start = context.intArgumentAt(0);
           int stop = context.intArgumentAt(1);
           Object withObject = context.argumentAt(2).javaValue();
+          if (withObject == null) {
+              withObject = "";
+          }
           int repStart = context.intArgumentAt(3);
           if (withObject instanceof String) {
             String replacementString = (String)withObject;
@@ -1335,5 +1364,10 @@ public class ProtoObject {
 
     public ProtoObject p200(ProtoObject receiver, PrimContext context) {
         throw new IllegalStateException("Implement primitive.");
+    }
+
+    public ProtoObject p201(ProtoObject receiver, PrimContext context) {
+        // Class name
+        return receiver.smalltalkString(receiver.name);
     }
 }

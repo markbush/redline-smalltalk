@@ -5,16 +5,22 @@ Collection subclass: #SequenceableCollection.
 "category: comparing"
 
 - = aCollection
+    | isSequenceable |
     "Answer if aCollection is equal to the receiver."
     self == aCollection ifTrue: [ ^ true ].
-    (aCollection isKindOf: SequenceableCollection) ifFalse: [ false ].
+    isSequenceable := aCollection isKindOf: SequenceableCollection.
+    isSequenceable ifFalse: [ ^ false ].
     self size = aCollection size ifFalse: [ ^ false ].
     1 to: self size do: [ :index |
-      (self at: index) = (aCollection at: index) ifFalse: [ ^ false ].
+      (self at: index) = (aCollection at: index)
+        ifFalse: [ ^ false ].
     ].
     ^ true.
 
 "category: accessing"
+
+- size
+    self subclassResponsibility.
 
 - atAll: aCollection put: anObject
     "Associate each element of the argument, aCollection (an Integer or other external key), with the second argument,
@@ -27,7 +33,7 @@ Collection subclass: #SequenceableCollection.
 
 - first
     "Answer the first element of the receiver. Report an error if the receiver contains no elements."
-    self notImplementedYet.
+    ^ self at: 1.
 
 - last
     "Answer the last element of the receiver. Report an error if the receiver contains no elements."
@@ -86,7 +92,13 @@ Collection subclass: #SequenceableCollection.
 
 - copyFrom: start to: stop
     "Answer a copy of a subset of the receiver, starting from element at index start until element at index stop."
-    self notImplementedYet.
+    | newSize |
+    newSize := stop - start + 1.
+    ^ (self species new: newSize)
+        replaceFrom: 1
+        to: newSize
+        with: self
+        startingAt: start.
 
 - copyReplaceAll: oldSubCollection with: newSubCollection
     "Answer a copy of the receiver in which all occurrences of oldSubCollection have been replaced by newSubCollection."
@@ -132,6 +144,13 @@ Collection subclass: #SequenceableCollection.
     "Answer a copy of the receiver in which all occurrences of oldElement have been left out."
     self notImplementedYet.
 
+- grownBy: length
+    | newCollection size |
+    size := self size.
+    newCollection := self species new: size + length.
+    newCollection replaceFrom: 1 to: size with: self startingAt: 1.
+    ^ newCollection
+
 "category: enumeration"
 
 - findFirst: aBlock
@@ -155,3 +174,39 @@ Collection subclass: #SequenceableCollection.
      aSequenceableCollection. aSequenceableCollection must be the same size as the receiver, and aBlock must be a
      two-argument block."
     self notImplementedYet.
+
+"category: removing"
+
+- remove: anObject ifAbsent: anExceptionBlock
+    self shouldNotImplement.
+
+"category: enumerating"
+
+- do: aBlock
+    | index length |
+    index := 0.
+    length := self size.
+    [ (index := index + 1) <= length ]
+      whileTrue: [ aBlock value: (self at: index) ].
+
+- collect: aBlock
+    | aStream index length |
+    aStream := WriteStream on: (self species new: self size).
+    index := 0.
+    length := self size.
+    [ (index := index + 1) <= length ]
+      whileTrue: [ aStream nextPut: (aBlock value: (self at: index)) ].
+    ^ aStream contents.
+
+- select: aBlock
+    | aStream index length newCollection |
+    newCollection := self species new: self size.
+    aStream := WriteStream on: newCollection.
+    index := 0.
+    length := self size.
+    [ (index := index + 1) <= length ]
+      whileTrue: [
+        (aBlock value: (self at: index))
+          ifTrue: [ aStream nextPut: (self at: index) ].
+      ].
+    ^ aStream contents.
