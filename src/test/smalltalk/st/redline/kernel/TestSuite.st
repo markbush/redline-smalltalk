@@ -22,6 +22,8 @@ Object subclass: #TestSuite.
     StringTest new test.
     self show: 'Running SequenceableCollectionTests'.
     SequenceableCollectionTest new test.
+    self show: 'Running OrderedCollectionTests'.
+    OrderedCollectionTest new test.
     self show: 'Running ArrayedCollectionTests'.
     ArrayedCollectionTest new test.
     self show: 'Running IntervalTests'.

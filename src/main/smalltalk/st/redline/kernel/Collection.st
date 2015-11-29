@@ -160,7 +160,7 @@ Object subclass: #Collection.
 - asOrderedCollection
     "Answer an OrderedCollection whose elements are those of the receiver (ordering is possibly arbitrary)."
     | anOrderedCollection |
-    anOrderedCollection := OrderedColection new: self size.
+    anOrderedCollection := OrderedCollection new: self size.
     self do: [ :each | anOrderedCollection addLast: each ].
     ^ anOrderedCollection.
 

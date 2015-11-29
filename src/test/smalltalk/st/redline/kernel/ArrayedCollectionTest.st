@@ -18,6 +18,17 @@ TestCase subclass: #ArrayedCollectionTest.
     self testDetectIfNone.
     self testInjectInto.
     self testPrintString.
+    self testFirst.
+    self testReplaceFromToWithStartingAt.
+    self testConcatenation.
+    self testCopyFromTo.
+    self testCopyReplaceFromToWith.
+    self testGrownBy.
+    "self testAsBag."
+    "self testAsSet."
+    self testAsOrderedCollection.
+    "self testAsSortedCollection."
+    "self testAsSortedCollectionWithSortBlock."
 
 - testSize
     | array |
@@ -146,3 +157,79 @@ TestCase subclass: #ArrayedCollectionTest.
     array := #('a' 'b' 'c').
     result := array printString.
     self assert: result equals: 'Array (''a'' ''b'' ''c'' )' withMessage: 'should produce correct printed form for Array of strings'.
+
+- testFirst
+    | array result |
+    array := #(1 2 3).
+    result := array first.
+    self assert: result equals: 1 withMessage: 'should select the first element'.
+    array := #($a $b $c).
+    result := array first.
+    self assert: result equals: $a withMessage: 'should select the first element'.
+
+- testReplaceFromToWithStartingAt
+    | array |
+    array := #(1 2 3 4 5 6 7).
+    array replaceFrom: 3 to: 5 with: #($a $b $c $d $e) startingAt: 1.
+    self assert: array equals: #(1 2 $a $b $c 6 7) withMessage: 'should replace subsequence'.
+    array := #(1 2 3 4 5 6 7).
+    array replaceFrom: 2 to: 4 with: #($a $b $c $d $e) startingAt: 3.
+    self assert: array equals: #(1 $c $d $e 5 6 7) withMessage: 'should replace subsequence with offset in replacement array'.
+
+- testConcatenation
+    | first second result |
+    first := #(1 2 3).
+    second := #($a $b $c).
+    result := first , second.
+    self assert: first equals: #(1 2 3) withMessage: 'should leave receiver unchanged'.
+    self assert: second equals: #($a $b $c) withMessage: 'should leave argument unchanged'.
+    self assert: result equals: #(1 2 3 $a $b $c) withMessage: 'should concatenate arrays.'.
+
+- testCopyFromTo
+    | array result |
+    array := #(1 2 3 4 5).
+    result := array copyFrom: 2 to: 4.
+    self assert: array equals: #(1 2 3 4 5) withMessage: 'should leave receiver unchanged'.
+    self assert: result equals: #(2 3 4) withMessage: 'should select subsequence'.
+
+- testCopyReplaceFromToWith
+    | array result replacement |
+    array := #(1 2 3 4 5).
+    replacement := #($a $b $c).
+    result := array copyReplaceFrom: 1 to: 0 with: replacement.
+    self assert: array equals: #(1 2 3 4 5) withMessage: 'should leave receiver unchanged'.
+    self assert: replacement equals: #($a $b $c) withMessage: 'should leave replacement unchanged'.
+    self assert: result equals: #($a $b $c 1 2 3 4 5) withMessage: 'should prepend when start = 1 and stop = 0'.
+    result := array copyReplaceFrom: array size + 1 to: array size with: replacement.
+    self assert: result equals: #(1 2 3 4 5 $a $b $c) withMessage: 'should append when start = size + 1 and stop = size'.
+    result := array copyReplaceFrom: 2 to: 4 with: replacement.
+    self assert: result equals: #(1 $a $b $c 5) withMessage: 'should replace elements otherwise'.
+
+- testGrownBy
+    | array result |
+    array := #(1 2 3).
+    result := array grownBy: 2.
+    self assert: array equals: #(1 2 3) withMessage: 'should leave receiver unchanged'.
+    self assert: result class equals: Array withMessage: 'should produce receivers species'.
+    self assert: result size equals: 5 withMessage: 'should produce new array of appropriate size'.
+    self assert: (result at: 1) equals: (array at: 1) withMessage: 'should preserve elements'.
+    self assert: (result at: 2) equals: (array at: 2) withMessage: 'should preserve elements'.
+    self assert: (result at: 3) equals: (array at: 3) withMessage: 'should preserve elements'.
+
+- testAsBag
+
+- testAsSet
+
+- testAsOrderedCollection
+    | array result |
+    array := #(1 2 3).
+    result := array asOrderedCollection.
+    self assert: result class equals: OrderedCollection withMessage: 'should produce an OrderedCollection'.
+    self assert: result size equals: array size withMessage: 'should return same sized collection'.
+    self assert: (result at: 1) equals: (array at: 1) withMessage: 'should preserve elements'.
+    self assert: (result at: 2) equals: (array at: 2) withMessage: 'should preserve elements'.
+    self assert: (result at: 3) equals: (array at: 3) withMessage: 'should preserve elements'.
+
+- testAsSortedCollection
+
+- testAsSortedCollectionWithSortBlock

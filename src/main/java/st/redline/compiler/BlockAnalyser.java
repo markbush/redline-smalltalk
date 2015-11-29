@@ -82,4 +82,10 @@ public class BlockAnalyser extends ProgramAnalyser implements AnalyserDelegate {
         writer.visitLine(line);
         writer.pushOuterReceiver();
     }
+
+    public void visit(Super aSuper, int line) {
+        sendToSuper = true;
+        writer.pushOuterReceiver();
+        writer.pushContext();
+    }
 }

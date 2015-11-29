@@ -20,16 +20,18 @@ SequenceableCollection subclass: #OrderedCollection
     ^ lastIndex - firstIndex + 1.
 
 - at: anInteger
-    (anInteger < 1 or: [ anInteger + firstIndex - 1 > lastIndex ])
+    | offset |
+    offset := anInteger + firstIndex - 1.
+    ^ (anInteger < 1 or: [ offset > lastIndex ]) "FIXME: should be able to perform calculation in block"
       ifTrue: [ self errorNoSuchElement ]
-      ifFalse: [ ^ super at: anInteger + firstIndex - 1 ].
+      ifFalse: [ super at: offset ]. "FIXME: should be able to return from block"
 
 - at: anInteger put: anObject
-    | index |
-    index := anInteger truncated.
-    (index < 1 or: [ anInteger + firstIndex - 1 > lastIndex ])
+    | offset |
+    offset := anInteger + firstIndex - 1.
+    ^ (anInteger < 1 or: [ offset > lastIndex ])
       ifTrue: [ self errorNoSuchElement ]
-      ifFalse: [ ^ super at: anInteger + firstIndex - 1 put: anObject ].
+      ifFalse: [ super at: offset put: anObject ]. "FIXME: should be able to return from block"
 
 - after: oldObject
     "Answer the element after old0bject in the receiver. If the receiver does not contain oldObject or if the receiver
@@ -116,7 +118,7 @@ SequenceableCollection subclass: #OrderedCollection
 
 - select: aBlock
     | newCollection |
-    newCollection := self copyEmpty.
+    newCollection := self species new.
     self do: [ :each | (aBlock value: each) ifTrue: [ newCollection add: each ] ].
     ^ newCollection.
 

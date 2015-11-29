@@ -61,7 +61,7 @@ public class ProgramAnalyser implements AnalyserDelegate {
     private Map<String, Integer> argumentsRegistry;
     private int temporariesIndex;
     private HashMap<String, Integer> temporariesRegistry;
-    private boolean sendToSuper = false;
+    protected boolean sendToSuper = false;
     private boolean hasBlockWithAnswerExpression = false;
 
     public ProgramAnalyser(Analyser analyser, SmalltalkClassLoader smalltalkClassLoader, AnalyserFactory analyserFactory,
