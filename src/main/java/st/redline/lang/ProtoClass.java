@@ -33,8 +33,11 @@ public class ProtoClass extends ProtoObject {
     public ProtoClass create(String name, Map<String, Integer> instVarMap) {
         ProtoClass metaclass = create(name);
         metaclass.variableIndexes = new HashMap<String, Integer>();
-        int attributeSize = addSuperclassInstanceVariables(metaclass);
-        addThisClassInstanceVariables(instVarMap, metaclass, attributeSize);
+        int attributeSize = 0;
+        if (superclass != null && superclass instanceof ProtoClass) {
+            attributeSize = metaclass.addSuperclassInstanceVariables(((ProtoClass)superclass).thisclass);
+        }
+        metaclass.addThisClassInstanceVariables(instVarMap, attributeSize);
         attributeSize += instVarMap.size();
         if (attributeSize > 0) {
             metaclass.attributes = new ProtoObject[attributeSize + 1];
@@ -42,27 +45,24 @@ public class ProtoClass extends ProtoObject {
         return metaclass;
     }
 
-    private void addThisClassInstanceVariables(Map<String, Integer> instVarMap, ProtoClass metaclass, int attributeSize) {
-      for (String instVarName : instVarMap.keySet()) {
-        metaclass.variableIndexes.put(instVarName, instVarMap.get(instVarName) + attributeSize);
-      }
+    public void addThisClassInstanceVariables(Map<String, Integer> instVarMap, int attributeSize) {
+        for (String instVarName : instVarMap.keySet()) {
+            this.variableIndexes.put(instVarName, instVarMap.get(instVarName) + attributeSize);
+        }
     }
 
-    private int addSuperclassInstanceVariables(ProtoClass metaclass) {
-      int attributeSize = 0;
-      if (superclass != null && superclass instanceof ProtoClass) {
-           ProtoClass theProtoSuperclass = (ProtoClass)superclass;
-           if (theProtoSuperclass.thisclass != null && theProtoSuperclass.thisclass instanceof ProtoClass) {
-               ProtoClass theSuperclass = (ProtoClass)theProtoSuperclass.thisclass;
-               if (theSuperclass.variableIndexes != null) {
-                   for (String instVarName : theSuperclass.variableIndexes.keySet()) {
-                       metaclass.variableIndexes.put(instVarName, theSuperclass.variableIndexes.get(instVarName));
-                   }
-                   attributeSize = theSuperclass.variableIndexes.size();
-               }
-           }
-      }
-      return attributeSize;
+    public int addSuperclassInstanceVariables(ProtoObject superclass) {
+        int attributeSize = 0;
+            if (superclass != null && superclass instanceof ProtoClass) {
+                ProtoClass theSuperclass = (ProtoClass)superclass;
+                if (theSuperclass.variableIndexes != null) {
+                    for (String instVarName : theSuperclass.variableIndexes.keySet()) {
+                        this.variableIndexes.put(instVarName, theSuperclass.variableIndexes.get(instVarName));
+                    }
+                    attributeSize = theSuperclass.variableIndexes.size();
+                }
+            }
+        return attributeSize;
     }
 
     public ProtoClass subclass() {
