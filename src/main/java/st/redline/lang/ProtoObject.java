@@ -196,9 +196,20 @@ public class ProtoObject {
     }
 
     public ProtoObject variableAt(String name) {
-        int index = selfclass.indexOfVariable(name);
+        ProtoObject indexClass = selfclass;
+        ProtoObject lookupClass = this;
+        // Class variable need to be looked up in the metaclass
+        if (Character.isUpperCase(name.codePointAt(0))) {
+            if (this instanceof ProtoClass) {
+                lookupClass = indexClass;  
+            } else {
+                indexClass = indexClass.selfclass;
+                lookupClass = indexClass;  
+            }
+        }
+        int index = indexClass.indexOfVariable(name);
         if (index != 0)
-            return attributes[index];
+            return lookupClass.attributes[index];
         return resolveObject(name);
     }
 
@@ -207,9 +218,20 @@ public class ProtoObject {
     }
 
     public ProtoObject variableAtPut(String name, ProtoObject object) {
-        int index = selfclass.indexOfVariable(name);
+        ProtoObject indexClass = selfclass;
+        ProtoObject lookupClass = this;
+        // Class variable need to be looked up in the metaclass
+        if (Character.isUpperCase(name.codePointAt(0))) {
+            if (this instanceof ProtoClass) {
+                lookupClass = indexClass;
+            } else {
+                indexClass = indexClass.selfclass;
+                lookupClass = indexClass;  
+            }
+        }
+        int index = indexClass.indexOfVariable(name);
         if (index != 0) {
-            attributes[index] = object;
+            lookupClass.attributes[index] = object;
             return this;
         }
         throw new IllegalStateException("Slot for '" + name + "' not found.");

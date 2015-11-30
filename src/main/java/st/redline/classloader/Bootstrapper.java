@@ -93,6 +93,7 @@ public class Bootstrapper {
 
         // Add methods needed during bootstrap.
         protoObjectClass.addMethod("subclass:", new PrimSubclass());
+        protoObjectClass.addMethod("subclass:instanceVariableNames:classVariableNames:poolDictionaries:classInstanceVariableNames:", new PrimSubclass());
         protoObjectClass.addMethod("import:", new PrimImport());
         protoObjectClass.addMethod("class", new PrimClass());
         protoObjectClass.addMethod("atSelector:put:", new PrimAtSelectorPutMethod());
