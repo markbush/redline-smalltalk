@@ -25,6 +25,11 @@ Number subclass: #Integer.
     "Answer the quotient of dividing the receiver by the argument, aNumber with truncation towards negative infinity."
     <primitive: 32>.
 
+- \\ aNumber
+    "Answer the integer remainder defined by division with truncation toward negative infinity. This is the modulo
+     operation."
+    <primitive: 31>.
+
 - reciprocal
     ^ 1 / self
 
@@ -62,6 +67,9 @@ Number subclass: #Integer.
 - >= aNumber
     "Answer whether the receiver is less than the argument."
     <primitive: 6>.
+
+- hash
+    ^ self.
 
 "category: testing"
 

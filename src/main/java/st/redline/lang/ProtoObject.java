@@ -544,11 +544,20 @@ public class ProtoObject {
     }
 
     public ProtoObject p31(ProtoObject receiver, PrimContext context) {
-        throw new IllegalStateException("Implement primitive.");
+        // Integer \\
+        ProtoObject arg = context.argumentAt(0);
+        if (arg.javaValue() instanceof BigDecimal) {
+            BigDecimal argValue = (BigDecimal)arg.javaValue();
+            BigDecimal receiverValue = (BigDecimal)receiver.javaValue();
+            return smalltalkNumber(receiverValue.remainder(argValue));
+        } else {
+            // Handle other numberical args
+            throw new IllegalStateException("Implement primitive.");
+        }
     }
 
     public ProtoObject p32(ProtoObject receiver, PrimContext context) {
-        // (Small)Integer //
+        // Integer //
         ProtoObject arg = context.argumentAt(0);
         if (arg.javaValue() instanceof BigDecimal) {
             BigDecimal argValue = (BigDecimal)arg.javaValue();
@@ -799,7 +808,12 @@ public class ProtoObject {
 
     public ProtoObject p75(ProtoObject receiver, PrimContext context) {
         // Object hash.
-        return smalltalkNumber(new BigDecimal(receiver.hashCode()));
+        Object valueToHash = receiver;
+        if (receiver.selfclass.name.equals("Character")
+            && receiver.javaValue() != null) {
+            valueToHash = receiver.javaValue();
+        }
+        return receiver.smalltalkNumber(new BigDecimal(valueToHash.hashCode()));
     }
 
     public ProtoObject p76(ProtoObject receiver, PrimContext context) {
@@ -1083,7 +1097,13 @@ public class ProtoObject {
 
     public ProtoObject p133(ProtoObject receiver, PrimContext context) {
         // BlockClojure -> whileFalse
-        throw new IllegalStateException("Implement primitive.");
+        // Evaluate the receiver as long as it is false.
+        ProtoObject aBlockResult = nil();
+        ProtoObject receiverResult = receiver.perform("value");
+        while (receiverResult.isFalseObject()) {
+            receiverResult = receiver.perform("value");
+        }
+        return aBlockResult;
     }
 
     public ProtoObject p134(ProtoObject receiver, PrimContext context) {

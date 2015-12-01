@@ -28,6 +28,8 @@ Object subclass: #TestSuite.
     ArrayedCollectionTest new test.
     self show: 'Running IntervalTests'.
     IntervalTest new test.
+    self show: 'Running SetTests'.
+    SetTest new test.
 
 - show: message
     Transcript show: message; cr.
