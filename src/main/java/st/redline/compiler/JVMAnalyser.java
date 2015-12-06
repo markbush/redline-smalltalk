@@ -132,7 +132,7 @@ public class JVMAnalyser implements AnalyserDelegate, Opcodes {
     public void visitBegin(Array array) {
     }
 
-    public void visitEnd(Array array) {
+    public void visitEnd(Array array, int index, boolean insideArray, int line) {
     }
 
     public void visitBegin(BinarySelectorMessageElement binarySelectorMessageElement, String selector, int line) {

@@ -7,6 +7,7 @@ TestCase subclass: #ArrayedCollectionTest.
 - test
     self testSize.
     self testWith.
+    self testNestedArrays.
     self testIncludes.
     self testEmpty.
     self testOccurrencesOf.
@@ -24,11 +25,11 @@ TestCase subclass: #ArrayedCollectionTest.
     self testCopyFromTo.
     self testCopyReplaceFromToWith.
     self testGrownBy.
-    "self testAsBag."
-    "self testAsSet."
+    self testAsBag.
+    self testAsSet.
     self testAsOrderedCollection.
-    "self testAsSortedCollection."
-    "self testAsSortedCollectionWithSortBlock."
+    self testAsSortedCollection.
+    self testAsSortedCollectionWithSortBlock.
 
 - testSize
     | array |
@@ -53,6 +54,19 @@ TestCase subclass: #ArrayedCollectionTest.
     array := Array with: $a with: $b with: $c with: $d.
     self assert: array size equals: 4 withMessage: 'should have size 4'.
     self assert: array equals: #($a $b $c $d) withMessage: 'should construct correct 4 element array'.
+
+- testNestedArrays
+    | array nestedArray |
+    "array := Array new: 5.
+    nestedArray := #(1 2 3 4 5 6 7 8).
+    self assert: array size equals: 5 withMessage: 'should have empty array of size 5'.
+    array at: 2 put: nestedArray.
+    self assert: array size equals: 5 withMessage: 'should still have size 5'.
+    self assert: (array at: 2) equals: nestedArray withMessage: 'should have the whole nested array in one slot'."
+    array := #(1 2 (3 4) fred).
+    self assert: array size equals: 4 withMessage: 'should have size 4'.
+    self assert: (array at: 3) equals: #(3 4) withMessage: 'should have array at element 3'.
+    self assert: (array at: 4) equals: #fred withMessage: 'should have correct last element'.
 
 - testIncludes
     | array |
@@ -219,6 +233,16 @@ TestCase subclass: #ArrayedCollectionTest.
 - testAsBag
 
 - testAsSet
+    | array set |
+    array := #(1 4 2 1 4 2 3 2).
+    set := array asSet.
+    self assert: array size equals: 8 withMessage: 'should have 8 elements in array'.
+    self assert: set class equals: Set withMessage: 'should produce a Set'.
+    self assert: set size equals: 4 withMessage: 'should only have unique elements in the set'.
+    self assertTrue: (set includes: 1) withMessage: 'should preserve elements'.
+    self assertTrue: (set includes: 2) withMessage: 'should preserve elements'.
+    self assertTrue: (set includes: 3) withMessage: 'should preserve elements'.
+    self assertTrue: (set includes: 4) withMessage: 'should preserve elements'.
 
 - testAsOrderedCollection
     | array result |

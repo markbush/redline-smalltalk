@@ -46,9 +46,9 @@ Collection subclass: #Set
 - find: oldObject ifAbsent: aBlock
     | index |
     index := self findElementOrNil: oldObject.
-    index isNil
-      ifTrue: [ ^ aBlock value ]
-      ifFalse: [ ^ index ].
+    ^ (index isNil or: [ (self basicAt: index) isNil ])
+        ifTrue: [ aBlock value ]
+        ifFalse: [ index ].
 
 - fixCollisionsFrom: start
     | element index |
@@ -87,8 +87,8 @@ Collection subclass: #Set
 
 - occurrencesOf: anObject
     ^ (self includes: anObject)
-      ifTrue: [ 1 ]
-      ifFalse: [ 0 ].
+        ifTrue: [ 1 ]
+        ifFalse: [ 0 ].
 
 "category: adding"
 
@@ -117,9 +117,10 @@ Collection subclass: #Set
 "category: enumerating"
 
 - do: aBlock
-    tally = 0 ifTrue: [ ^ self ].
+    tally = 0
+      ifTrue: [ ^ self ].
     1 to: self basicSize do: [ :index |
       (self basicAt: index) == nil
         ifFalse: [ aBlock value: (self basicAt: index) ]
     ].
-
+    ^ self

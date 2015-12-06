@@ -45,7 +45,7 @@ Object subclass: #Collection.
     "Answer how many of the receiver's elements are equal to the argument , anObject."
     | tally |
     tally := 0.
-    self do: [ :each | |inner| inner := tally. anObject = each ifTrue: [ inner := inner + 1 ]. tally := inner ]. "FIXME"
+    self do: [ :each | anObject = each ifTrue: [ tally := tally + 1 ] ].
     ^ tally.
 
 "category: accessing"
@@ -184,6 +184,9 @@ Object subclass: #Collection.
 
 - errorNotFound
     self error: 'Object is not in the collection'.
+
+- errorNotKeyed
+    self error: self class name , 's do not respond to keyed accessing messages'.
 
 - maxPrint
     ^ 5000.

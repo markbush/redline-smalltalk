@@ -6,7 +6,7 @@ Behavior subclass: #ClassDescription.
 
 - name
    "Answer a String that is the name of the receiver."
-    self notImplementedYet.
+    <primitive: 201>
 
 - comment
     "Answer a String that is the comment for the receiver."
@@ -59,3 +59,8 @@ Behavior subclass: #ClassDescription.
     "The argument, setOfChanges, is a collection of class/message pairs that were changed. Store a description of each
      of these pairs on the file accessed by the argument, aFileStream."
     self notImplementedYet.
+
+"category: printing"
+
+- printOn: aStream
+    aStream nextPutAll: self name.

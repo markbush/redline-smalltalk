@@ -187,8 +187,8 @@ public class Analyser implements NodeVisitor {
         delegate.visitBegin(array);
     }
 
-    public void visitEnd(Array array) {
-        delegate.visitEnd(array);
+    public void visitEnd(Array array, int index, boolean insideArray, int line) {
+        delegate.visitEnd(array, index, insideArray, line);
     }
 
     public void visitBegin(BinarySelectorMessageElement binarySelectorMessageElement, String selector, int line) {

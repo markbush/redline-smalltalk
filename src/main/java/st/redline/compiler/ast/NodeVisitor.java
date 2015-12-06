@@ -27,7 +27,7 @@ public interface NodeVisitor {
     void visitBegin(AssignmentExpression assignmentExpression);
     void visitEnd(AssignmentExpression assignmentExpression);
     void visitBegin(Array array);
-    void visitEnd(Array array);
+    void visitEnd(Array array, int index, boolean insideArray, int line);
     void visitBegin(BinarySelectorMessageElement binarySelectorMessageElement, String selector, int line);
     void visitEnd(BinarySelectorMessageElement binarySelectorMessageElement, String selector, int line);
     void visitBegin(Block block, int line);

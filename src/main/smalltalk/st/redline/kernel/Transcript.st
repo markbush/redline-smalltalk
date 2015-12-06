@@ -2,10 +2,12 @@
 
 Object subclass: #Transcript.
 
-"categtory: streaming"
+"category: streaming"
 
 + show: anObject
-    self stdout: anObject.
+    anObject class = String
+      ifTrue: [ self stdout: anObject ]
+      ifFalse: [ self stdout: anObject printString ].
 
 + cr
     JVM getStatic: 'java/lang/System' named: 'out' as: 'Ljava/io/PrintStream;';

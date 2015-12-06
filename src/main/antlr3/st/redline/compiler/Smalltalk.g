@@ -61,7 +61,7 @@ expression returns [Expression expression]
 simple_expression returns [SimpleExpression simpleExpression]
   @init { simpleExpression = new SimpleExpression(); }
   : primary {simpleExpression.add($primary.primary);} ( message_expression {$simpleExpression.add($message_expression.messageExpression);} 
-    ( ';' WHITESPACE message_element {$simpleExpression.add($message_element.messageElement);} )* )?
+    ( WHITESPACE? ';' WHITESPACE message_element {$simpleExpression.add($message_element.messageElement);} )* )?
   ;
 
 message_element returns [MessageElement messageElement]

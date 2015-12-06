@@ -87,6 +87,7 @@ public class PrimSubclass extends ProtoObject {
                                        Map<String,Integer> instVarMap) {
         ProtoClass newMetaclass = ((ProtoClass) receiver.selfclass).subclass();
         newMetaclass.selfclass = metaclass;
+        newMetaclass.name = name + " class";
         ProtoClass newClass = newMetaclass.create(name, instVarMap);
         newClass.superclass = receiver;
         return newClass;

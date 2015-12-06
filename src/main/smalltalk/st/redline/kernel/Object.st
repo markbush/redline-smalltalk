@@ -66,6 +66,11 @@ ProtoObject subclass: #Object.
      indexed variables, then report an error. Answer anObject."
     <primitive: 143>
 
+"category: associating"
+
+- -> anObject
+    ^ Association key: self value: anObject.
+
 "category: comparing"
 
 - = anObject
@@ -207,7 +212,7 @@ ProtoObject subclass: #Object.
 
 - errorSubscriptBounds: anIndex
     "Report that the specified index is out of bounds for the receiver."
-    self error: 'The index is out of range for this object.'.
+    self error: 'The index ' , anIndex printString , ' is out of range for ' , self printString.
 
 "category: testing"
 

@@ -198,7 +198,9 @@ public class ProgramAnalyser implements AnalyserDelegate {
         writer.invokeObjectArray(array.size());
     }
 
-    public void visitEnd(Array array) {
+    public void visitEnd(Array array, int index, boolean insideArray, int line) {
+        if (insideArray)
+            writer.invokeArrayPutAt(index, line);
     }
 
     public void visitBegin(BinarySelectorMessageElement binarySelectorMessageElement, String selector, int line) {

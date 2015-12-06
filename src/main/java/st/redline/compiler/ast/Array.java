@@ -51,13 +51,13 @@ public class Array extends Primary implements ArrayElement {
     }
 
     public int line() {
-        return elements.get(0).line();
+        return elements.size() > 0 ? elements.get(0).line() : 0;
     }
 
     public void accept(NodeVisitor nodeVisitor) {
         nodeVisitor.visitBegin(this);
         for (ArrayElement arrayElement : elements)
             arrayElement.accept(nodeVisitor);
-        nodeVisitor.visitEnd(this);
+        nodeVisitor.visitEnd(this, index, insideArray, line());
     }
 }

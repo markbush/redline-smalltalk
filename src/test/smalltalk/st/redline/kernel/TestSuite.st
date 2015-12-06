@@ -28,8 +28,16 @@ Object subclass: #TestSuite.
     ArrayedCollectionTest new test.
     self show: 'Running IntervalTests'.
     IntervalTest new test.
+    self show: 'Running BagTests'.
+    BagTest new test.
     self show: 'Running SetTests'.
     SetTest new test.
+    self show: 'Running LookupKeyTests'.
+    LookupKeyTest new test.
+    self show: 'Running AssociationTests'.
+    AssociationTest new test.
+    self show: 'Running DictionaryTests'.
+    DictionaryTest new test.
 
 - show: message
     Transcript show: message; cr.

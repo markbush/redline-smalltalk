@@ -170,9 +170,9 @@ public class TracingAnalyser implements AnalyserDelegate {
         delegate.visitBegin(array);
     }
 
-    public void visitEnd(Array array) {
-        trace("visitEnd(Array) " + array);
-        delegate.visitEnd(array);
+    public void visitEnd(Array array, int index, boolean insideArray, int line) {
+        trace("visitEnd(Array) " + array + " " + index + " " + insideArray + " " + line);
+        delegate.visitEnd(array, index, insideArray, line);
     }
 
     public void visitBegin(BinarySelectorMessageElement binarySelectorMessageElement, String selector, int line) {

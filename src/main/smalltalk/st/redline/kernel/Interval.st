@@ -64,22 +64,18 @@ SequenceableCollection subclass: #Interval
     | aValue |
     aValue := start.
     step < 0
-      ifTrue: [ | innerBlock innerValue |
-        innerBlock := aBlock. "FIXME: outer values not available to nested blocks!"
-        innerValue := aValue.
-        [ stop <= innerValue ]
+      ifTrue: [
+        [ stop <= aValue ]
           whileTrue: [
-            innerBlock value: innerValue.
-            innerValue := innerValue + step.
+            aBlock value: aValue.
+            aValue := aValue + step.
           ].
       ]
-      ifFalse: [ | innerBlock innerValue |
-        innerBlock := aBlock. "FIXME: outer values not available to nested blocks!"
-        innerValue := aValue.
-        [ stop >= innerValue ]
+      ifFalse: [
+        [ stop >= aValue ]
           whileTrue: [
-            innerBlock value: innerValue.
-            innerValue := innerValue + step.
+            aBlock value: aValue.
+            aValue := aValue + step.
           ].
       ].
 
@@ -90,28 +86,20 @@ SequenceableCollection subclass: #Interval
     nextValue := start.
     i := 1.
     step < 0
-      ifTrue: [ | innerBlock innerValue innerI innerResult |
-        innerBlock := aBlock. "FIXME: outer values not available to nested blocks!"
-        innerValue := nextValue.
-        innerI := i.
-        innerResult := result.
-        [ stop <= innerValue ]
+      ifTrue: [
+        [ stop <= nextValue ]
           whileTrue: [
-            innerResult at: innerI put: (innerBlock value: innerValue).
-            innerValue := innerValue + step.
-            innerI := innerI + 1.
+            result at: i put: (aBlock value: nextValue).
+            nextValue := nextValue + step.
+            i := i + 1.
           ].
       ]
-      ifFalse: [ | innerBlock innerValue innerI innerResult |
-        innerBlock := aBlock. "FIXME: outer values not available to nested blocks!"
-        innerValue := nextValue.
-        innerI := i.
-        innerResult := result.
-        [ stop >= innerValue ]
+      ifFalse: [
+        [ stop >= nextValue ]
           whileTrue: [
-            innerResult at: innerI put: (innerBlock value: innerValue).
-            innerValue := innerValue + step.
-            innerI := innerI + 1.
+            result at: i put: (aBlock value: nextValue).
+            nextValue := nextValue + step.
+            i := i + 1.
           ].
       ].
       ^ result.
