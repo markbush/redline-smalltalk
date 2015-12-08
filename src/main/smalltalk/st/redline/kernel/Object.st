@@ -1,11 +1,18 @@
 "Redline Smalltalk, Copyright (c) James C. Ladd. All rights reserved. See LICENSE in the root of this distribution."
 
-ProtoObject subclass: #Object.
+ProtoObject subclass: #Object
+            instanceVariableNames: ''
+            classVariableNames: 'Dependents'
+            poolDictionaries: ''
+            classInstanceVariableNames: ''.
 
 "category: initialization"
 
 + initialize
     "Subclasses should redefine this method to perform initializations on Class creation"
+
++ setupDependents
+    Dependents isNil ifTrue: [ Dependents := IdentityDictionary new ].
 
 - initialize
     "Subclasses should redefine this method to perform initializations on instance creation"
@@ -144,16 +151,27 @@ ProtoObject subclass: #Object.
 
 - addDependent: anObject
     "Make the given object one of the receiver's dependents."
-    self notImplementedYet.
+    | dependents |
+    dependents := self dependents.
+    (dependents includes: anObject)
+      ifFalse: [ dependents add: anObject ].
+    Dependents at: self put: dependents.
+    ^ anObject.
 
 - removeDependent: anObject
     "Remove the given object as one of the receiver's dependents."
-    self notImplementedYet.
+    | dependents |
+    dependents := self dependents reject: [:each | each == anObject].
+    dependents isEmpty
+      ifTrue: [ Dependents removeKey: self ifAbsent: [] ]
+      ifFalse: [ Dependents at: self put: dependents ].
+    ^ anObject.
 
 - dependents
     "Answer a collection of objects that are 'dependent' on the receiver; that is, all objects that should be notified
      if the receiver changes."
-    self notImplementedYet.
+    self class setupDependents. "FIXME: should have one instance of Dependents in Object initialized with Object class"
+    ^ Dependents at: self ifAbsent: [ OrderedCollection new ].
 
 - release
     "Remove references to objects that may refer to the receiver. This message should be overridden by subclasses with
@@ -175,7 +193,7 @@ ProtoObject subclass: #Object.
 - changed: aParameter
     "Receiver changed. The change is denoted by the argument aParameter. Usually the argument is a Symbol that is part
      of the dependent's change protocol. Inform all of the dependents."
-    self notImplementedYet.
+    self dependents do: [ :aDependent | aDependent update: aParameter ].
 
 - update: aParameter
     "Receive a change notice from an object of whom the receiver is a dependent. The default behavior is to do nothing;

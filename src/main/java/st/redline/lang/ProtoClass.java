@@ -40,7 +40,7 @@ public class ProtoClass extends ProtoObject {
         metaclass.addThisClassInstanceVariables(instVarMap, attributeSize);
         attributeSize += instVarMap.size();
         if (attributeSize > 0) {
-            metaclass.attributes = new ProtoObject[attributeSize + 1];
+            metaclass.attributes = metaclass.nilArray(attributeSize + 1);
         }
         return metaclass;
     }

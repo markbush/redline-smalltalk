@@ -36,7 +36,7 @@ public class PrimSubclass extends ProtoObject {
                 metaclass.addThisClassInstanceVariables(classVarMap, attributeSize);
                 attributeSize += classVarMap.size();
                 if (attributeSize > 0) {
-                    metaclass.attributes = new ProtoObject[attributeSize + 1];
+                    metaclass.attributes = metaclass.nilArray(attributeSize + 1);
               }
             }
         }

@@ -66,6 +66,15 @@ public class ProtoObject {
         return classLoader().NIL;
     }
 
+    public ProtoObject[] nilArray(int size) {
+        ProtoObject[] array = new ProtoObject[size];
+        ProtoObject nil = nil();
+        for (int i=0; i<size; i++) {
+            array[i] = nil;
+        }
+        return array;
+    }
+
     public SmalltalkClassLoader classLoader() {
         return (SmalltalkClassLoader) currentThread().getContextClassLoader();
     }
@@ -751,7 +760,7 @@ public class ProtoObject {
         ProtoObject anInstance = new ProtoObject();
         anInstance.selfclass = aClass;
         if (aClass.attributes != null) {
-          anInstance.attributes = new ProtoObject[aClass.attributes.length];
+            anInstance.attributes = receiver.nilArray(aClass.attributes.length);
         }
         return anInstance;
     }
@@ -765,7 +774,7 @@ public class ProtoObject {
         ProtoObject anInstance = new ProtoObject();
         anInstance.selfclass = aClass;
         if (aClass.attributes != null) {
-          anInstance.attributes = new ProtoObject[aClass.attributes.length];
+            anInstance.attributes = receiver.nilArray(aClass.attributes.length);
         }
         if (aClass.name.equals("String")) {
             String string = "";
