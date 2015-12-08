@@ -10,6 +10,7 @@ TestCase subclass: #StringTest.
     self testAtPut.
     self testReplaceFromToWithStartingAt.
     self testConcatenation.
+    self testEquals.
 
 - testSize
     self assert: 'hello' size equals: 5 withMessage: 'should report length of string'.
@@ -40,3 +41,10 @@ TestCase subclass: #StringTest.
     hello := 'Hello, '.
     world := 'World!'.
     self assert: hello , world equals: 'Hello, World!' withMessage: 'should be able to concatenate strings'.
+
+- testEquals
+    | string1 string2 |
+    string1 := 'a string'.
+    string2 := 'a string'.
+    self assertTrue: string1 = string2 withMessage: 'should be equal strings'.
+    self assertFalse: string1 == string2 withMessage: 'should not be identical strings'.

@@ -38,6 +38,8 @@ Object subclass: #TestSuite.
     AssociationTest new test.
     self show: 'Running DictionaryTests'.
     DictionaryTest new test.
+    self show: 'Running IdentityDictionaryTests'.
+    IdentityDictionaryTest new test.
 
 - show: message
     Transcript show: message; cr.

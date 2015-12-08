@@ -73,7 +73,7 @@ Set subclass: #Dictionary.
 "category: dictionary testing"
 
 - includes: anObject
-    self do: [ :each | anObject = each ifTrue: [ ^ true ] ].
+    self do: [ :eachValue | anObject = eachValue ifTrue: [ ^ true ] ].
     ^ false.
 
 - includesAssociation: anAssociation
@@ -83,7 +83,7 @@ Set subclass: #Dictionary.
 
 - includesKey: key
     "Answer whether the receiver has a key equal to the argument, key."
-    self associationsDo: [ :each | key = each key ifTrue: [ ^ true ] ].
+    self associationsDo: [ :assoc | key = assoc key ifTrue: [ ^ true ] ].
     ^ false.
 
 "category: dictionary removing"
@@ -128,7 +128,7 @@ Set subclass: #Dictionary.
 - collect: aBlock
     | newCollection |
     newCollection := Bag new.
-    self do: [ :each | newCollection add: (aBlock value: each) ].
+    self do: [ :eachValue | newCollection add: (aBlock value: eachValue) ].
     ^ newCollection.
 
 - select: aBlock
