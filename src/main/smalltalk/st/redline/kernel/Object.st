@@ -170,7 +170,6 @@ ProtoObject subclass: #Object
 - dependents
     "Answer a collection of objects that are 'dependent' on the receiver; that is, all objects that should be notified
      if the receiver changes."
-    self class setupDependents. "FIXME: should have one instance of Dependents in Object initialized with Object class"
     ^ Dependents at: self ifAbsent: [ OrderedCollection new ].
 
 - release

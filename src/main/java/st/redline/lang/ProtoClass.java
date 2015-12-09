@@ -105,8 +105,12 @@ public class ProtoClass extends ProtoObject {
             if (index != null)
                 return index;
         }
-        if (superclass != null)
-            return superclass.indexOfVariable(name);
+        if (superclass != null) {
+            Integer index = superclass.indexOfVariable(name);
+            if (index != null && index > 0) {
+                return -1;
+            }
+        }
         return 0;  // Smalltalk indexes can't be zero (0).
     }
 

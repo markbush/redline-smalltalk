@@ -23,6 +23,13 @@ public class Bootstrapper {
         smalltalkClassLoader.stoppedBootstrapping();
         bootstrapNilHierarchy(smalltalkClassLoader);
         bootstrapBooleans(smalltalkClassLoader);
+        bootstrapDependents(smalltalkClassLoader);
+    }
+
+    private void bootstrapDependents(SmalltalkClassLoader smalltalkClassLoader) throws Exception {
+        ProtoObject Metaclass = smalltalkClassLoader.METACLASS;
+        ProtoObject Object = Metaclass.resolveObject("st.redline.kernel.Object");
+        Object.perform("setupDependents");
     }
 
     private void bootstrapBooleans(SmalltalkClassLoader smalltalkClassLoader) throws Exception {

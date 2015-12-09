@@ -205,21 +205,45 @@ public class ProtoObject {
     }
 
     public ProtoObject variableAt(String name) {
-        ProtoObject indexClass = selfclass;
-        ProtoObject lookupClass = this;
+        ProtoObject result = null;
         // Class variable need to be looked up in the metaclass
         if (Character.isUpperCase(name.codePointAt(0))) {
-            if (this instanceof ProtoClass) {
-                lookupClass = indexClass;  
-            } else {
-                indexClass = indexClass.selfclass;
-                lookupClass = indexClass;  
+            ProtoObject lookupClass = selfclass;
+            if (! (this instanceof ProtoClass)) {
+              lookupClass = lookupClass.selfclass;
+            }
+            result = lookupClass.classVariableAt(name);
+            if (result == null) {
+                result = resolveObject(name);
+            }
+        } else {
+            result = instanceVariableAt(name);
+            if (result == null) {
+                throw new IllegalStateException("Error: Variable not found: '" + name + "'.");
             }
         }
-        int index = indexClass.indexOfVariable(name);
-        if (index != 0)
-            return lookupClass.attributes[index];
-        return resolveObject(name);
+        return result;
+    }
+
+    public ProtoObject instanceVariableAt(String name) {
+        int index = selfclass.indexOfVariable(name);
+        if (index > 0)
+            return this.attributes[index];
+        return null;
+    }
+
+    public ProtoObject classVariableAt(String name) {
+        // Class variable need to be looked up in the metaclass
+        if (this instanceof EigenClass) {
+            return null;
+        }
+        int index = this.indexOfVariable(name);
+        if (index > 0)
+            return this.attributes[index];
+        if (index < 0) {
+          return this.superclass().classVariableAt(name);
+        }
+        return null;
     }
 
     public static ProtoObject variablePutAtIn(ProtoObject object, String name, ProtoObject receiver) {
@@ -227,23 +251,37 @@ public class ProtoObject {
     }
 
     public ProtoObject variableAtPut(String name, ProtoObject object) {
-        ProtoObject indexClass = selfclass;
-        ProtoObject lookupClass = this;
         // Class variable need to be looked up in the metaclass
         if (Character.isUpperCase(name.codePointAt(0))) {
-            if (this instanceof ProtoClass) {
-                lookupClass = indexClass;
-            } else {
-                indexClass = indexClass.selfclass;
-                lookupClass = indexClass;  
+            ProtoObject lookupClass = selfclass;
+            if (! (this instanceof ProtoClass)) {
+                lookupClass = lookupClass.selfclass;
             }
+            lookupClass.classVariableAtPut(name, object);
+        } else {
+            instanceVariableAtPut(name, object);
         }
-        int index = indexClass.indexOfVariable(name);
-        if (index != 0) {
-            lookupClass.attributes[index] = object;
-            return this;
+        return this;
+    }
+
+    public void instanceVariableAtPut(String name, ProtoObject object) {
+        int index = selfclass.indexOfVariable(name);
+        if (index > 0) {
+            this.attributes[index] = object;
+        } else {
+            throw new IllegalStateException("Unknown variable: '" + name + "'.");
         }
-        throw new IllegalStateException("Unknown variable: '" + name + "'.");
+    }
+
+    public void classVariableAtPut(String name, ProtoObject object) {
+        int index = indexOfVariable(name);
+        if (index > 0) {
+            attributes[index] = object;
+        } else if (index < 0) {
+            superclass().classVariableAtPut(name, object);
+        } else {
+            throw new IllegalStateException("Unknown variable: '" + name + "'.");
+        }
     }
 
     protected int indexOfVariable(String name) {

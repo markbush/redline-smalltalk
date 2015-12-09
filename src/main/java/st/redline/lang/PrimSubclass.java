@@ -32,7 +32,7 @@ public class PrimSubclass extends ProtoObject {
                 if (metaclass.variableIndexes == null) {
                     metaclass.variableIndexes = new HashMap<String, Integer>();
                 }
-                int attributeSize = metaclass.addSuperclassInstanceVariables(metaclass.superclass);
+                int attributeSize = 0;
                 metaclass.addThisClassInstanceVariables(classVarMap, attributeSize);
                 attributeSize += classVarMap.size();
                 if (attributeSize > 0) {
